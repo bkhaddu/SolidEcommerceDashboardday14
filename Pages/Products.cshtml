@@ -1,0 +1,40 @@
+﻿@page
+@model SolidEcommerceDashboard.Pages.ProductsModel
+
+<h1>Product Dashboard</h1>
+
+<form method="post" class="product-form">
+    <input asp-for="Product.Name" placeholder="Product Name" />
+    <input asp-for="Product.Category" placeholder="Category" />
+    <input asp-for="Product.Price" placeholder="Price" />
+    <input asp-for="Product.Quantity" placeholder="Quantity" />
+
+    <button type="submit">Add Product</button>
+</form>
+
+<hr />
+
+<h2>Product List</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Category</td>
+                <td>₹@item.Price</td>
+                <td>@item.Quantity</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solid E-Commerce Dashboard</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<body>
+    <header>
+        <nav style="background:#0f172a; padding:15px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+
+                <!-- Logo -->
+                <div style="color:#38bdf8; font-size:22px; font-weight:bold;">
+                    🚀 E-Commerce Dashboard
+                </div>
+
+                <!-- Navigation -->
+                <ul style="list-style:none; display:flex; gap:20px; margin:0; padding:0;">
+
+                    <li>
+                        <a href="/" style="color:white; text-decoration:none;">Home</a>
+                    </li>
+
+                    <li>
+                        <a href="/Products" style="color:white; text-decoration:none;">Products</a>
+                    </li>
+
+                    <li>
+                        <a href="/Orders" style="color:white; text-decoration:none;">Orders</a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        @RenderBody()
+    </div>
+
+</body>
+</html>

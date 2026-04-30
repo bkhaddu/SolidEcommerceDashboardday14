@@ -1,0 +1,48 @@
+﻿@page
+@model SolidEcommerceDashboard.Pages.OrdersModel
+
+<h1>Order Dashboard</h1>
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="success-box">
+        @Model.Message
+    </div>
+}
+
+<form method="post" class="product-form">
+    <input asp-for="Order.CustomerName" placeholder="Customer Name" />
+    <input asp-for="Order.ProductName" placeholder="Product Name" />
+    <input asp-for="Order.Amount" placeholder="Amount" />
+
+    <button type="submit">Create Order</button>
+</form>
+
+<hr />
+
+<h2>Order List</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Amount</th>
+            <th>Payment</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.Orders)
+        {
+            <tr>
+                <td>@item.CustomerName</td>
+                <td>@item.ProductName</td>
+                <td>₹@item.Amount</td>
+                <td>@item.PaymentMethod</td>
+                <td>@item.OrderDate.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
