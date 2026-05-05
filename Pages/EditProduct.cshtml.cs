@@ -5,18 +5,18 @@ using SolidEcommerceDashboard.Models;
 
 namespace SolidEcommerceDashboard.Pages
 {
-    public class ProductsModel : PageModel
+    public class EditProductModel : PageModel
     {
         private readonly IProductRepository _productRepository;
         private readonly IWebHostEnvironment _environment;
 
-        public ProductsModel(IProductRepository productRepository, IWebHostEnvironment environment)
+        public EditProductModel(
+            IProductRepository productRepository,
+            IWebHostEnvironment environment)
         {
             _productRepository = productRepository;
             _environment = environment;
         }
-
-        public List<Product> Products { get; set; } = new List<Product>();
 
         [BindProperty]
         public Product Product { get; set; } = new Product();
@@ -24,36 +24,30 @@ namespace SolidEcommerceDashboard.Pages
         [BindProperty]
         public IFormFile? ProductImage { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            var role = HttpContext.Session.GetString("UserRole");
+            var product = await _productRepository.GetProductByIdAsync(id);
 
-            if (role != "Admin")
+            if (product == null)
             {
-                Response.Redirect("/Index");
-                return;
+                return RedirectToPage("/Products");
             }
 
-            Products = await _productRepository.GetAllProductsAsync();
+            Product = product;
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var role = HttpContext.Session.GetString("UserRole");
-
-            if (role != "Admin")
+            if (string.IsNullOrWhiteSpace(Product.Category))
             {
-                return RedirectToPage("/Index");
+                Product.Category = "General";
             }
 
-            if (string.IsNullOrWhiteSpace(Product.Name))
-                Product.Name = "Default Product";
-
-            if (string.IsNullOrWhiteSpace(Product.Category))
-                Product.Category = "General";
-
             if (string.IsNullOrWhiteSpace(Product.Description))
+            {
                 Product.Description = "No description";
+            }
 
             if (ProductImage != null)
             {
@@ -79,9 +73,9 @@ namespace SolidEcommerceDashboard.Pages
                 Product.ImagePath = "/images/products/" + fileName;
             }
 
-            await _productRepository.AddProductAsync(Product);
+            await _productRepository.UpdateProductAsync(Product);
 
-            return RedirectToPage();
+            return RedirectToPage("/Products");
         }
     }
 }

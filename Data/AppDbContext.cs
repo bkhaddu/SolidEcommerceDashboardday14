@@ -11,6 +11,11 @@ namespace SolidEcommerceDashboard.Data
         }
 
         public DbSet<Product> Products { get; set; }
+
         public DbSet<Order> Orders { get; set; }
+
+        public DbSet<CartItem> CartItems { get; set; }
+
+        public DbSet<AppUser> AppUsers { get; set; }
     }
 }

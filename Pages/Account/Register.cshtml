@@ -1,0 +1,51 @@
+﻿@page
+@model SolidEcommerceDashboard.Pages.Account.RegisterModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="auth-page">
+    <div class="auth-card">
+
+        <div class="auth-left">
+            <h1>Create Customer Account</h1>
+            <p>Join our store, explore products, add items to cart, and place orders easily.</p>
+
+            <div class="auth-points">
+                <span>🛒 Shop products</span>
+                <span>💳 Checkout easily</span>
+                <span>📦 Track your orders</span>
+            </div>
+        </div>
+
+        <div class="auth-right">
+            <h2>Sign Up</h2>
+
+            <form method="post">
+                <input asp-for="NewUser.FullName"
+                       class="auth-input"
+                       placeholder="Full Name" />
+
+                <input asp-for="NewUser.Email"
+                       class="auth-input"
+                       placeholder="Email Address" />
+
+                <input asp-for="NewUser.Password"
+                       type="password"
+                       class="auth-input"
+                       placeholder="Password" />
+
+                <button type="submit" class="auth-btn">
+                    Create Account
+                </button>
+            </form>
+
+            <p class="auth-link">
+                Already have an account?
+                <a asp-page="/Account/Login">Login</a>
+            </p>
+        </div>
+
+    </div>
+</div>

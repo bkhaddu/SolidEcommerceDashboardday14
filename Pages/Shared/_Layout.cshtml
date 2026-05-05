@@ -3,45 +3,63 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Solid E-Commerce Dashboard</title>
+    <title>@ViewData["Title"] - SolidEcommerceDashboard</title>
 
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 
 <body>
-    <header>
-        <nav style="background:#0f172a; padding:15px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
 
-                <!-- Logo -->
-                <div style="color:#38bdf8; font-size:22px; font-weight:bold;">
-                    🚀 E-Commerce Dashboard
-                </div>
+    <!-- NAVBAR -->
+    <header class="main-header">
+        <nav class="main-nav">
 
-                <!-- Navigation -->
-                <ul style="list-style:none; display:flex; gap:20px; margin:0; padding:0;">
-
-                    <li>
-                        <a href="/" style="color:white; text-decoration:none;">Home</a>
-                    </li>
-
-                    <li>
-                        <a href="/Products" style="color:white; text-decoration:none;">Products</a>
-                    </li>
-
-                    <li>
-                        <a href="/Orders" style="color:white; text-decoration:none;">Orders</a>
-                    </li>
-
-                </ul>
+            <div class="logo">
+                <a asp-page="/Index">E-Commerce</a>
             </div>
+
+            <div class="nav-links">
+
+                <a asp-page="/Index">Home</a>
+
+                @if (Context.Session.GetString("UserRole") == "Admin")
+                {
+                    <a asp-page="/Products">Products</a>
+                }
+
+                <a asp-page="/Cart">Cart</a>
+                <a asp-page="/Orders">Orders</a>
+
+                @if (Context.Session.GetString("UserEmail") == null)
+                {
+                    <a asp-page="/Account/Login">Login</a>
+                    <a asp-page="/Account/Register">Register</a>
+                }
+                else
+                {
+                    <span class="user-name">
+                        Hello, @Context.Session.GetString("UserName")
+                    </span>
+
+                    <a asp-page="/Account/Logout" class="logout-btn">
+                        Logout
+                    </a>
+                }
+
+            </div>
+
         </nav>
     </header>
 
-    <!-- Main Content -->
-    <div class="container">
+    <!-- BODY -->
+    <div class="main-container">
         @RenderBody()
     </div>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+        <p>© 2026 Solid Ecommerce Dashboard</p>
+    </footer>
 
 </body>
 </html>

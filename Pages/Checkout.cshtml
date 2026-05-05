@@ -1,0 +1,130 @@
+﻿@page
+@model SolidEcommerceDashboard.Pages.CheckoutModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="checkout-page">
+
+    <div class="checkout-header">
+        <div>
+            <h1>Checkout</h1>
+            <p>Choose Card or UPI and complete your fake payment.</p>
+        </div>
+
+        <a asp-page="/Cart" class="continue-btn">Back to Cart</a>
+    </div>
+
+    <div class="checkout-layout">
+
+        <div class="payment-card">
+            <h2>Payment Method</h2>
+
+            <form method="post">
+
+                <div class="payment-options">
+                    <label class="payment-option">
+                        <input type="radio" asp-for="PaymentMethod" value="Card" checked onchange="togglePayment()" />
+                        <span>💳 Card</span>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" asp-for="PaymentMethod" value="UPI" onchange="togglePayment()" />
+                        <span>📱 UPI</span>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" asp-for="PaymentMethod" value="Cash on Delivery" onchange="togglePayment()" />
+                        <span>💵 Cash on Delivery</span>
+                    </label>
+                </div>
+
+                <div id="cardSection">
+                    <div class="form-group">
+                        <label>Card Holder Name</label>
+                        <input asp-for="CardHolderName" class="checkout-input" placeholder="Enter card holder name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input asp-for="CardNumber" class="checkout-input" maxlength="19" placeholder="1234 5678 9012 3456" />
+                    </div>
+
+                    <div class="payment-row">
+                        <div class="form-group">
+                            <label>Expiry Date</label>
+                            <input asp-for="ExpiryDate" class="checkout-input" placeholder="MM/YY" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input asp-for="CVV" class="checkout-input" maxlength="3" placeholder="123" />
+                        </div>
+                    </div>
+                </div>
+
+                <div id="upiSection" style="display:none;">
+                    <div class="upi-box">
+                        <div class="upi-icon">UPI</div>
+                        <p>Pay using any UPI app like PhonePe, Google Pay, Paytm, or BHIM.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>UPI ID</label>
+                        <input asp-for="UpiId" class="checkout-input" placeholder="example@upi" />
+                    </div>
+                </div>
+
+                <button type="submit" class="pay-btn">
+                    Pay ₹@Model.GrandTotal
+                </button>
+
+            </form>
+        </div>
+
+        <div class="order-summary-card">
+            <h2>Order Summary</h2>
+
+            @foreach (var item in Model.CartItems)
+            {
+                <div class="checkout-item">
+                    @if (!string.IsNullOrEmpty(item.ImagePath))
+                    {
+                        <img src="@item.ImagePath" alt="@item.ProductName" />
+                    }
+                    else
+                    {
+                        <div class="checkout-no-img">No Image</div>
+                    }
+
+                    <div>
+                        <h4>@item.ProductName</h4>
+                        <p>Qty: @item.Quantity</p>
+                        <strong>₹@item.TotalPrice</strong>
+                    </div>
+                </div>
+            }
+
+            <div class="checkout-total">
+                <span>Total</span>
+                <strong>₹@Model.GrandTotal</strong>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function togglePayment() {
+        const selected = document.querySelector('input[name="PaymentMethod"]:checked').value;
+
+        document.getElementById("cardSection").style.display =
+            selected === "Card" ? "block" : "none";
+
+        document.getElementById("upiSection").style.display =
+            selected === "UPI" ? "block" : "none";
+    }
+
+    window.onload = togglePayment;
+</script>

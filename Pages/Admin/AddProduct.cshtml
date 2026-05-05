@@ -1,0 +1,54 @@
+﻿@page
+@model SolidEcommerceDashboard.Pages.Admin.AddProductModel
+
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-dark text-white text-center">
+            <h2>Add New Product</h2>
+        </div>
+
+        <div class="card-body p-4">
+            <form method="post" enctype="multipart/form-data">
+
+                <div class="mb-3">
+                    <label class="form-label">Product Name</label>
+                    <input asp-for="Product.Name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Price</label>
+                    <input asp-for="Product.Price" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
+                    <input asp-for="Product.Quantity" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <input asp-for="Product.Category" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea asp-for="Product.Description" class="form-control"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Product Image</label>
+                    <input type="file" asp-for="ProductImage" class="form-control" accept="image/*" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Add Product
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>

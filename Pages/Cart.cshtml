@@ -1,0 +1,113 @@
+﻿@page
+@model SolidEcommerceDashboard.Pages.CartModel
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<div class="cart-page">
+
+    <!-- HEADER -->
+    <div class="cart-header">
+        <div>
+            <h1>Your Cart</h1>
+            <p>Review your selected products before placing an order.</p>
+        </div>
+
+        <a asp-page="/Index" class="continue-btn">Continue Shopping</a>
+    </div>
+
+    @if (Model.CartItems.Any())
+    {
+        <div class="cart-layout">
+
+            <!-- LEFT: CART ITEMS -->
+            <div class="cart-items">
+
+                @foreach (var item in Model.CartItems)
+                {
+                    <div class="cart-card">
+
+                        @if (!string.IsNullOrEmpty(item.ImagePath))
+                        {
+                            <img src="@item.ImagePath" alt="@item.ProductName" />
+                        }
+                        else
+                        {
+                            <div class="cart-no-image">No Image</div>
+                        }
+
+                        <div class="cart-info">
+
+                            <h3>@item.ProductName</h3>
+
+                            <p>Price: ₹@item.Price</p>
+
+                            <!-- QUANTITY CONTROLS -->
+                            <div class="quantity-box">
+
+                                <form method="post" asp-page-handler="Decrease">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="qty-btn">−</button>
+                                </form>
+
+                                <span>@item.Quantity</span>
+
+                                <form method="post" asp-page-handler="Increase">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="qty-btn">+</button>
+                                </form>
+
+                            </div>
+
+                            <strong>Total: ₹@item.TotalPrice</strong>
+
+                            <form method="post" asp-page-handler="Remove">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="remove-btn">Remove</button>
+                            </form>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+
+            <!-- RIGHT: SUMMARY -->
+            <div class="cart-summary">
+
+                <h2>Order Summary</h2>
+
+                <div class="summary-row">
+                    <span>Total Items</span>
+                    <strong>@Model.CartItems.Sum(x => x.Quantity)</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Grand Total</span>
+                    <strong>₹@Model.GrandTotal</strong>
+                </div>
+
+                <!-- ✅ FIXED BUTTON (GOES TO PAYMENT PAGE) -->
+                <a asp-page="/Checkout" class="checkout-btn">
+                    Proceed to Checkout
+                </a>
+
+                <form method="post" asp-page-handler="Clear">
+                    <button type="submit" class="clear-btn">Clear Cart</button>
+                </form>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-cart">
+            <h2>Your cart is empty</h2>
+            <p>Add products to your cart first.</p>
+            <a asp-page="/Index" class="continue-btn">Shop Now</a>
+        </div>
+    }
+
+</div>

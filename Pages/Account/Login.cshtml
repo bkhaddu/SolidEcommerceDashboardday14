@@ -1,0 +1,52 @@
+﻿@page
+@model SolidEcommerceDashboard.Pages.Account.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="auth-page">
+    <div class="auth-card">
+
+        <div class="auth-left">
+            <h1>Welcome Back</h1>
+            <p>Login to continue shopping, manage your cart, and place orders easily.</p>
+
+            <div class="auth-points">
+                <span>🛒 Access your cart</span>
+                <span>💳 Continue checkout</span>
+                <span>📦 View your orders</span>
+            </div>
+        </div>
+
+        <div class="auth-right">
+            <h2>Login</h2>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="error-box">@Model.ErrorMessage</div>
+            }
+
+            <form method="post">
+                <input asp-for="Email"
+                       class="auth-input"
+                       placeholder="Email Address" />
+
+                <input asp-for="Password"
+                       type="password"
+                       class="auth-input"
+                       placeholder="Password" />
+
+                <button type="submit" class="auth-btn">
+                    Login
+                </button>
+            </form>
+
+            <p class="auth-link">
+                Don’t have an account?
+                <a asp-page="/Account/Register">Create Account</a>
+            </p>
+        </div>
+
+    </div>
+</div>

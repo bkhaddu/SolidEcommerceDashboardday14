@@ -1,10 +1,118 @@
 ﻿@page
-@model IndexModel
+@model SolidEcommerceDashboard.Pages.IndexModel
+
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="ecom-home">
+
+    <div class="hero-card">
+
+        <div class="hero-nav">
+            <div class="hero-links">
+                <a asp-page="/Index">Home</a>
+                <a asp-page="/Products">Products</a>
+                <a asp-page="/Cart">Cart</a>
+                <a asp-page="/Orders">Orders</a>
+            </div>
+        </div>
+
+        <div class="hero-content">
+
+            <div class="hero-left">
+                <h1>E-Commerce</h1>
+
+                <p>
+                    Online shopping made simple. Browse products,
+                    add them to cart, and manage your store easily.
+                </p>
+
+                <div class="hero-buttons">
+
+                    @if (HttpContext.Session.GetString("UserRole") == "Admin")
+                    {
+                        <a asp-page="/Products" class="btn-outline">
+                            Add Product
+                        </a>
+                    }
+
+                    <a href="#products" class="btn-dark">
+                        View Products
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-image-box">
+                    <img src="/images/wipro-primary-logo-color-rbg.png.webp" alt="Logo" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <section id="products" class="home-products">
+
+        <h2>Available Products</h2>
+
+        @if (Model.Products.Any())
+        {
+            <div class="product-showcase">
+
+                @foreach (var product in Model.Products)
+                {
+                    <div class="showcase-card">
+
+                        @if (!string.IsNullOrEmpty(product.ImagePath))
+                        {
+                            <img src="@product.ImagePath" alt="@product.Name" />
+                        }
+                        else
+                        {
+                            <div class="no-product-image">No Image</div>
+                        }
+
+                        <div class="showcase-info">
+
+                            <h3>@product.Name</h3>
+                            <p>@product.Category</p>
+
+                            <strong>₹@product.Price</strong>
+
+                            @if (HttpContext.Session.GetString("UserRole") == "Customer")
+                            {
+                                <form method="post" asp-page-handler="AddToCart">
+                                    <input type="hidden" name="productId" value="@product.Id" />
+
+                                    <button type="submit" class="cart-btn">
+                                        Add to Cart
+                                    </button>
+                                </form>
+                            }
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="empty-products">
+                <h3>No products added yet</h3>
+
+                @if (HttpContext.Session.GetString("UserRole") == "Admin")
+                {
+                    <a asp-page="/Products" class="btn-dark">
+                        Add Product
+                    </a>
+                }
+            </div>
+        }
+
+    </section>
+
 </div>

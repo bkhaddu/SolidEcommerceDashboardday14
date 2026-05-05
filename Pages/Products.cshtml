@@ -1,40 +1,163 @@
 ﻿@page
 @model SolidEcommerceDashboard.Pages.ProductsModel
 
-<h1>Product Dashboard</h1>
+@{
+    ViewData["Title"] = "Products";
+}
 
-<form method="post" class="product-form">
-    <input asp-for="Product.Name" placeholder="Product Name" />
-    <input asp-for="Product.Category" placeholder="Category" />
-    <input asp-for="Product.Price" placeholder="Price" />
-    <input asp-for="Product.Quantity" placeholder="Quantity" />
+<div class="product-page">
 
-    <button type="submit">Add Product</button>
-</form>
+    <div class="product-header">
+        <div>
+            <h1>Add New Product</h1>
+            <p>Create and manage your ecommerce products easily.</p>
+        </div>
 
-<hr />
+        <div class="product-actions">
+            <a asp-page="/Index" class="cancel-btn">Cancel</a>
+            <button form="productForm" type="submit" class="save-btn">Save Product</button>
+        </div>
+    </div>
 
-<h2>Product List</h2>
+    <form id="productForm" method="post" enctype="multipart/form-data" class="product-form-layout">
 
-<table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Quantity</th>
-        </tr>
-    </thead>
+        <div class="left-card">
 
-    <tbody>
-        @foreach (var item in Model.Products)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>@item.Category</td>
-                <td>₹@item.Price</td>
-                <td>@item.Quantity</td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <div class="panel-card">
+                <h3>Thumbnail</h3>
+
+                <div class="upload-box">
+                    <img id="previewImage" src="/images/placeholder-product.png" alt="Product Preview" />
+
+                    <label for="ProductImage" class="upload-label">
+                        Upload Image
+                    </label>
+
+                    <input type="file"
+                           id="ProductImage"
+                           asp-for="ProductImage"
+                           accept="image/*"
+                           hidden
+                           onchange="previewFile(event)" />
+
+                    <p>JPG, PNG or WEBP allowed</p>
+                </div>
+            </div>
+
+            <div class="panel-card">
+                <h3>Status</h3>
+
+                <label>Product Status</label>
+                <select class="input-control">
+                    <option>Published</option>
+                    <option>Draft</option>
+                    <option>Out of Stock</option>
+                </select>
+            </div>
+
+            <div class="panel-card">
+                <h3>Product Details</h3>
+
+                <label>Category</label>
+                <input asp-for="Product.Category" class="input-control" placeholder="Shoes, Clothes, Electronics" />
+
+                <label>Quantity</label>
+                <input asp-for="Product.Quantity" class="input-control" />
+            </div>
+
+        </div>
+
+        <div class="right-card">
+
+            <div class="panel-card big-card">
+
+                <div class="tabs">
+                    <span class="active">General</span>
+                    <span>Advanced</span>
+                </div>
+
+                <h3>General Information</h3>
+
+                <label>Product Name</label>
+                <input asp-for="Product.Name" class="input-control" placeholder="Example: Nike Air Max Shoe" />
+
+                <label>Description</label>
+                <textarea asp-for="Product.Description"
+                          class="input-control textarea"
+                          placeholder="Write product description here..."></textarea>
+
+                <h3>Pricing</h3>
+
+                <label>Base Price</label>
+                <input asp-for="Product.Price" class="input-control" />
+
+                <div class="two-column">
+                    <div>
+                        <label>Discount Type</label>
+                        <select class="input-control">
+                            <option>No Discount</option>
+                            <option>Percentage</option>
+                            <option>Fixed Price</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Tax Class</label>
+                        <select class="input-control">
+                            <option>Tax Free</option>
+                            <option>GST 5%</option>
+                            <option>GST 12%</option>
+                            <option>GST 18%</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <section class="product-list-area">
+        <h2>Product List</h2>
+
+        <div class="product-grid">
+            @foreach (var product in Model.Products)
+            {
+                <div class="product-card">
+                    @if (!string.IsNullOrEmpty(product.ImagePath))
+                    {
+                        <img src="@product.ImagePath" alt="@product.Name" />
+                    }
+                    else
+                    {
+                        <div class="no-image">No Image</div>
+                    }
+
+                    <div class="product-info">
+                        <h4>@product.Name</h4>
+                        <p>@product.Description</p>
+                        <strong>₹@product.Price</strong>
+                        <span>Qty: @product.Quantity</span>
+
+                        <br />
+
+                        <a asp-page="/EditProduct"
+                               asp-route-id="@product.Id"
+                               class="edit-btn">
+                            Edit
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+</div>
+
+<script>
+    function previewFile(event) {
+        const image = document.getElementById("previewImage");
+        image.src = URL.createObjectURL(event.target.files[0]);
+    }
+</script>

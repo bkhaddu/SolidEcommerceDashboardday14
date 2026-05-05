@@ -1,0 +1,49 @@
+﻿@page
+@model SolidEcommerceDashboard.Pages.Admin.DashboardModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Product Dashboard</h2>
+        <a asp-page="/Admin/AddProduct" class="btn btn-success">Add Product</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(product.ImagePath))
+                        {
+                            <img src="@product.ImagePath"
+                                 style="width:120px; height:100px; object-fit:cover; border-radius:10px;" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
+
+                    <td>@product.Name</td>
+                    <td>₹@product.Price</td>
+                    <td>@product.Category</td>
+                    <td>@product.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

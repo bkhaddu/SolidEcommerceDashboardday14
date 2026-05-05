@@ -6,32 +6,37 @@ using SolidEcommerceDashboard.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
 builder.Services.AddRazorPages();
 
-// Connect SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
 
-// SOLID - Dependency Injection
+// Repositories
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 
-builder.Services.AddScoped<IPaymentService, UpiPaymentService>();
-builder.Services.AddScoped<INotificationService, EmailNotificationService>();
-
+// Services
 builder.Services.AddScoped<OrderService>();
+
+// Session for login
+builder.Services.AddSession();
 
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

@@ -1,37 +1,27 @@
-﻿using SolidEcommerceDashboard.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SolidEcommerceDashboard.Data;
 using SolidEcommerceDashboard.Models;
 
 namespace SolidEcommerceDashboard.Services
 {
     public class OrderService
     {
-        private readonly IOrderRepository _orderRepository;
-        private readonly IPaymentService _paymentService;
-        private readonly INotificationService _notificationService;
+        private readonly AppDbContext _context;
 
-        public OrderService(
-            IOrderRepository orderRepository,
-            IPaymentService paymentService,
-            INotificationService notificationService)
+        public OrderService(AppDbContext context)
         {
-            _orderRepository = orderRepository;
-            _paymentService = paymentService;
-            _notificationService = notificationService;
+            _context = context;
         }
 
-        public async Task<string> CreateOrderAsync(Order order)
+        public async Task<List<Order>> GetAllOrdersAsync()
         {
-            // Strategy Pattern (Payment)
-            string paymentResult = _paymentService.Pay(order.Amount);
+            return await _context.Orders.ToListAsync();
+        }
 
-            // Save order
-            await _orderRepository.AddOrderAsync(order);
-
-            // Notification
-            string notificationResult =
-                _notificationService.SendNotification($"Order placed for {order.CustomerName}");
-
-            return paymentResult + " | " + notificationResult;
+        public async Task CreateOrderAsync(Order order)
+        {
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
         }
     }
 }

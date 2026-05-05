@@ -2,22 +2,21 @@
 
 namespace SolidEcommerceDashboard.Models
 {
-    public class Product
+    public class CartItem
     {
         public int Id { get; set; }
 
-        [Required]
-        public string Name { get; set; } = "";
+        public int ProductId { get; set; }
 
         [Required]
+        public string ProductName { get; set; } = "";
+
         public decimal Price { get; set; }
 
         public int Quantity { get; set; }
 
-        public string Category { get; set; } = "";
-
-        public string Description { get; set; } = "";
-
         public string? ImagePath { get; set; }
+
+        public decimal TotalPrice => Price * Quantity;
     }
 }

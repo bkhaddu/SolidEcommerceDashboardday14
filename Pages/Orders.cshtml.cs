@@ -1,43 +1,56 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SolidEcommerceDashboard.Interfaces;
 using SolidEcommerceDashboard.Models;
 using SolidEcommerceDashboard.Services;
+using SolidEcommerceDashboard.Interfaces;
 
 namespace SolidEcommerceDashboard.Pages
 {
     public class OrdersModel : PageModel
     {
         private readonly OrderService _orderService;
-        private readonly IOrderRepository _orderRepository;
+        private readonly ICartRepository _cartRepository;
 
-        public OrdersModel(OrderService orderService, IOrderRepository orderRepository)
+        public OrdersModel(
+            OrderService orderService,
+            ICartRepository cartRepository)
         {
             _orderService = orderService;
-            _orderRepository = orderRepository;
+            _cartRepository = cartRepository;
         }
 
+        public List<Order> Orders { get; set; } = new List<Order>();
+
+        public decimal GrandTotal { get; set; }
+
         [BindProperty]
-        public Order Order { get; set; } = new();
-
-        public List<Order> Orders { get; set; } = new();
-
-        public string Message { get; set; } = "";
+        public Order Order { get; set; } = new Order();
 
         public async Task OnGetAsync()
         {
-            Orders = await _orderRepository.GetAllOrdersAsync();
+            Orders = await _orderService.GetAllOrdersAsync();
+
+            var cartItems = await _cartRepository.GetCartItemsAsync();
+            GrandTotal = cartItems.Sum(x => x.TotalPrice);
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Order.PaymentMethod = "UPI";
+            var cartItems = await _cartRepository.GetCartItemsAsync();
 
-            Message = await _orderService.CreateOrderAsync(Order);
+            if (!cartItems.Any())
+                return RedirectToPage("/Cart");
 
-            Orders = await _orderRepository.GetAllOrdersAsync();
+            Order.TotalAmount = cartItems.Sum(x => x.TotalPrice);
+            Order.OrderDate = DateTime.Now;
 
-            return Page();
+            // ✅ FIXED LINE (NO STRING)
+            await _orderService.CreateOrderAsync(Order);
+
+            // Clear cart after order
+            await _cartRepository.ClearCartAsync();
+
+            return RedirectToPage();
         }
     }
 }

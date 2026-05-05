@@ -1,0 +1,97 @@
+﻿@page "{id:int}"
+@model SolidEcommerceDashboard.Pages.EditProductModel
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<div class="product-page">
+
+    <div class="product-header">
+        <div>
+            <h1>Edit Product</h1>
+            <p>Update product details and image.</p>
+        </div>
+
+        <div class="product-actions">
+            <a asp-page="/Products" class="cancel-btn">Cancel</a>
+            <button form="editProductForm" type="submit" class="save-btn">Update Product</button>
+        </div>
+    </div>
+
+    <form id="editProductForm" method="post" enctype="multipart/form-data" class="product-form-layout">
+
+        <input type="hidden" asp-for="Product.Id" />
+        <input type="hidden" asp-for="Product.ImagePath" />
+
+        <div class="left-card">
+
+            <div class="panel-card">
+                <h3>Thumbnail</h3>
+
+                <div class="upload-box">
+                    @if (!string.IsNullOrEmpty(Model.Product.ImagePath))
+                    {
+                        <img id="previewImage" src="@Model.Product.ImagePath" alt="Product Preview" />
+                    }
+                    else
+                    {
+                        <img id="previewImage" src="/images/placeholder-product.png" alt="Product Preview" />
+                    }
+
+                    <label for="ProductImage" class="upload-label">
+                        Change Image
+                    </label>
+
+                    <input type="file"
+                           id="ProductImage"
+                           asp-for="ProductImage"
+                           accept="image/*"
+                           hidden
+                           onchange="previewFile(event)" />
+
+                    <p>JPG, PNG or WEBP allowed</p>
+                </div>
+            </div>
+
+            <div class="panel-card">
+                <h3>Product Details</h3>
+
+                <label>Category</label>
+                <input asp-for="Product.Category" class="input-control" />
+
+                <label>Quantity</label>
+                <input asp-for="Product.Quantity" class="input-control" />
+            </div>
+
+        </div>
+
+        <div class="right-card">
+            <div class="panel-card big-card">
+
+                <h3>General Information</h3>
+
+                <label>Product Name</label>
+                <input asp-for="Product.Name" class="input-control" />
+
+                <label>Description</label>
+                <textarea asp-for="Product.Description" class="input-control textarea"></textarea>
+
+                <h3>Pricing</h3>
+
+                <label>Base Price</label>
+                <input asp-for="Product.Price" class="input-control" />
+
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+    function previewFile(event) {
+        const image = document.getElementById("previewImage");
+        image.src = URL.createObjectURL(event.target.files[0]);
+    }
+</script>

@@ -1,48 +1,58 @@
 ﻿@page
 @model SolidEcommerceDashboard.Pages.OrdersModel
 
-<h1>Order Dashboard</h1>
-
-@if (!string.IsNullOrEmpty(Model.Message))
-{
-    <div class="success-box">
-        @Model.Message
-    </div>
+@{
+    ViewData["Title"] = "Orders";
 }
 
-<form method="post" class="product-form">
-    <input asp-for="Order.CustomerName" placeholder="Customer Name" />
-    <input asp-for="Order.ProductName" placeholder="Product Name" />
-    <input asp-for="Order.Amount" placeholder="Amount" />
+<div class="orders-page">
 
-    <button type="submit">Create Order</button>
-</form>
+    <div class="cart-header">
+        <div>
+            <h1>Place Order</h1>
+            <p>Review your cart and confirm your order.</p>
+        </div>
+    </div>
 
-<hr />
+    <div class="cart-summary">
 
-<h2>Order List</h2>
+        <h2>Order Summary</h2>
 
-<table>
-    <thead>
-        <tr>
-            <th>Customer</th>
-            <th>Product</th>
-            <th>Amount</th>
-            <th>Payment</th>
-            <th>Date</th>
-        </tr>
-    </thead>
+        <div class="summary-row">
+            <span>Total Amount</span>
+            <strong>₹@Model.GrandTotal</strong>
+        </div>
 
-    <tbody>
-        @foreach (var item in Model.Orders)
-        {
-            <tr>
-                <td>@item.CustomerName</td>
-                <td>@item.ProductName</td>
-                <td>₹@item.Amount</td>
-                <td>@item.PaymentMethod</td>
-                <td>@item.OrderDate.ToShortDateString()</td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <form method="post">
+            <button type="submit" class="checkout-btn">
+                Confirm Order
+            </button>
+        </form>
+
+    </div>
+
+    <hr />
+
+    <h2>Order History</h2>
+
+    @if (Model.Orders.Any())
+    {
+        <div class="product-grid">
+            @foreach (var order in Model.Orders)
+            {
+                <div class="product-card">
+                    <div class="product-info">
+                        <h4>Order ID: @order.Id</h4>
+                        <p>Date: @order.OrderDate</p>
+                        <strong>Total: ₹@order.TotalAmount</strong>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No orders yet.</p>
+    }
+
+</div>

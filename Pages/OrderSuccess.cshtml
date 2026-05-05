@@ -1,0 +1,25 @@
+﻿@page
+@model SolidEcommerceDashboard.Pages.OrderSuccessModel
+
+@{
+    ViewData["Title"] = "Order Success";
+}
+
+<div class="success-page">
+
+    <div class="success-card">
+        <div class="success-icon">✓</div>
+
+        <h1>Order Placed Successfully</h1>
+
+        <p>
+            Thank you for shopping with us. Your order has been confirmed.
+        </p>
+
+        <div class="success-actions">
+            <a asp-page="/Index" class="continue-btn">Continue Shopping</a>
+            <a asp-page="/Orders" class="checkout-btn">View Orders</a>
+        </div>
+    </div>
+
+</div>
